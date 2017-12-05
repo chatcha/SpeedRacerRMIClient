@@ -1,6 +1,6 @@
 
 public enum Action {
-	Add,
-	Remove,
-	Refresh
+    Add,
+    Remove,
+    Refresh
 }

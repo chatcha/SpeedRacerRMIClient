@@ -1,3 +1,4 @@
+
 /**
  * L'état du client. <br/>
  * <br/>
@@ -6,9 +7,9 @@
  * <b>Interrupted</b> - {@link ArenaState#Interrupted} <br/>
  */
 public enum ClientState {
-	/**
-	 * le client est deconnecté du serveur
-	 */
-	Disconnected
+    /**
+     * le client est deconnecté du serveur
+     */
+    Disconnected
 
 }

@@ -1,3 +1,4 @@
+
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,155 +10,153 @@ import java.util.Vector;
 /**
  * Classe représentant l'arène dans laquelle l'utilisateur combat. <br/>
  * Cette arène a un nom et un état décrit par ArenaState.<br/>
- * Elle conserve la liste des objets Tile et Fence que la fenêtre de jeu 
+ * Elle conserve la liste des objets Tile et Fence que la fenêtre de jeu
  * (GuiArena) lit à chaque update. <br/>
  * Elle stocke également le nom du joueur gagnant ainsi que les scores.<br/>
- * 
- * À chaque update du client par le serveur, le client modifie l'état, la liste 
+ *
+ * À chaque update du client par le serveur, le client modifie l'état, la liste
  * de Tile, le nom du joueur gagnant et les scores.<br/>
  *
  */
 public class Arena extends Observable {
-	
-	private final String name;
-	
-	private ArenaState state;
-	
-	private Vector<Rectangle> vDisplayRoad; 
-        private Vector<Rectangle> vDisplayObstacles;
-        private Vector<Rectangle> vDisplayCars;
-        private Vector<Car> vCars ;
-        private Car  mCar;
-        
-        int pos; 
-        int nbParticipants; 
-        boolean bGameOver = false; 
-        String sPosition = null;
-	private String winner;
-        
-	private Map<String,Integer> scores;
-	
-	public Arena(String name) {
-		this.name = name;
-		this.vDisplayRoad = new Vector();
-		this.vDisplayRoad = new Vector();
-                this.vDisplayRoad = new Vector();
-		this.vDisplayCars = new Vector();
-                this.vCars = new Vector<Car>();
-		this.winner = null;
-		this.scores = new HashMap<String, Integer>();
-		this.state = ArenaState.Waiting;
-	}
-	
-	/***************************************************************************
-	 * ACCESSORS
-	 **************************************************************************/
-	
-	/**
-	 * Indique le nom de la partie de jeu associée à cette arène. <br/>
-	 * 
-	 * @return nom de la partie correspondant à l'arène
-	 */
-	public String getName() {
-		return name;
-	}
-	
-	/**
-	 * Indique l'état courrant de l'arène de combat. <br/>
-	 * 
-	 * @see ArenaState
-	 * @return l'état de l'Arena
-	 */
-	public ArenaState getState() {
-		return state;
-	}
 
-	public void setState(ArenaState state) {
-		this.state = state;
-		setChanged();
-		notifyObservers(state);
-	}
-	
-	public boolean isInProgress() {
-		return state == ArenaState.InProgress;
-	}
-	
-	public boolean isInterrupted() {
-		return state == ArenaState.Interrupted;
-	}
-	
-	public boolean isWaiting() {
-		return state == ArenaState.Waiting;
-	}
-	
-	public boolean isOver() {
-		return state == ArenaState.Over;
-	}
-	
-	public boolean isStarted() {
-		return state == ArenaState.Started;
-	}
+    private final String name;
 
-	
-	
-	
-	public String getWinner() {
-		return winner;
-	}
-	
-	public void setWinner(String winner) {
-		this.winner = winner;
-	}
-	
-	public Map<String, Integer> getScores() {
-		return scores;
-	}
-	
-	public void setScores(Map<String, Integer> scores) {
-		this.scores = scores;
-		setChanged();
-		notifyObservers(scores);
-	}
-        
-        public void setvDisplayRoad(Vector<Rectangle> vDisplayRoad) {
-		this.vDisplayRoad = vDisplayRoad;
-		setChanged();
-		notifyObservers(vDisplayRoad);
-	}
+    private ArenaState state;
 
-	public Vector<Rectangle> getVDisplayRoad() {
-		return vDisplayRoad;
-	}
+    private Vector<Rectangle> vDisplayRoad;
+    private Vector<Rectangle> vDisplayObstacles;
+    private Vector<Rectangle> vDisplayCars;
+    private Vector<Car> vCars;
+    private Car mCar;
 
-         public void setVDisplayObstacles(Vector<Rectangle> vDisplayObstacles) {
-		this.vDisplayObstacles = vDisplayObstacles;
-		setChanged();
-		notifyObservers(vDisplayObstacles);
-	}
+    int pos;
+    int nbParticipants;
+    boolean bGameOver = false;
+    String sPosition = null;
+    private String winner;
 
-	public Vector<Rectangle> getVDisplayObstacles() {
-		return vDisplayObstacles;
-	}
-        
-	 public void setVDisplayCars(Vector<Rectangle> vDisplayCars) {
-		this.vDisplayCars = vDisplayCars;
-		setChanged();
-		notifyObservers(vDisplayCars);
-	}
+    private Map<String, Integer> scores;
 
-	public Vector<Rectangle> getVDisplayCars() {
-		return vDisplayCars;
-	}
-        
-         public void setVCars(Vector<Car> vCars) {
-		this.mCar = vCars.elementAt(0);
-		setChanged();
-		notifyObservers(vCars);
-	}
+    public Arena(String name) {
+        this.name = name;
+        this.vDisplayRoad = new Vector();
+        this.vDisplayRoad = new Vector();
+        this.vDisplayRoad = new Vector();
+        this.vDisplayCars = new Vector();
+        this.vCars = new Vector<Car>();
+        this.winner = null;
+        this.scores = new HashMap<String, Integer>();
+        this.state = ArenaState.Waiting;
+    }
 
-	public Car getVCars() {
-		return vCars.elementAt(0);
-	}
+    /**
+     * *************************************************************************
+     * ACCESSORS
+     * ************************************************************************
+     */
+    /**
+     * Indique le nom de la partie de jeu associée à cette arène. <br/>
+     *
+     * @return nom de la partie correspondant à l'arène
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Indique l'état courrant de l'arène de combat. <br/>
+     *
+     * @see ArenaState
+     * @return l'état de l'Arena
+     */
+    public ArenaState getState() {
+        return state;
+    }
+
+    public void setState(ArenaState state) {
+        this.state = state;
+        setChanged();
+        notifyObservers(state);
+    }
+
+    public boolean isInProgress() {
+        return state == ArenaState.InProgress;
+    }
+
+    public boolean isInterrupted() {
+        return state == ArenaState.Interrupted;
+    }
+
+    public boolean isWaiting() {
+        return state == ArenaState.Waiting;
+    }
+
+    public boolean isOver() {
+        return state == ArenaState.Over;
+    }
+
+    public boolean isStarted() {
+        return state == ArenaState.Started;
+    }
+
+    public String getWinner() {
+        return winner;
+    }
+
+    public void setWinner(String winner) {
+        this.winner = winner;
+    }
+
+    public Map<String, Integer> getScores() {
+        return scores;
+    }
+
+    public void setScores(Map<String, Integer> scores) {
+        this.scores = scores;
+        setChanged();
+        notifyObservers(scores);
+    }
+
+    public void setvDisplayRoad(Vector<Rectangle> vDisplayRoad) {
+        this.vDisplayRoad = vDisplayRoad;
+        setChanged();
+        notifyObservers(vDisplayRoad);
+    }
+
+    public Vector<Rectangle> getVDisplayRoad() {
+        return vDisplayRoad;
+    }
+
+    public void setVDisplayObstacles(Vector<Rectangle> vDisplayObstacles) {
+        this.vDisplayObstacles = vDisplayObstacles;
+        setChanged();
+        notifyObservers(vDisplayObstacles);
+    }
+
+    public Vector<Rectangle> getVDisplayObstacles() {
+        return vDisplayObstacles;
+    }
+
+    public void setVDisplayCars(Vector<Rectangle> vDisplayCars) {
+        this.vDisplayCars = vDisplayCars;
+        setChanged();
+        notifyObservers(vDisplayCars);
+    }
+
+    public Vector<Rectangle> getVDisplayCars() {
+        return vDisplayCars;
+    }
+
+    public void setVCars(Vector<Car> vCars) {
+        this.mCar = vCars.elementAt(0);
+        setChanged();
+        notifyObservers(vCars);
+    }
+
+    public Car getVCars() {
+        return vCars.elementAt(0);
+    }
 
     public Car getmCar() {
         return mCar;
@@ -165,12 +164,11 @@ public class Arena extends Observable {
 
     public void setmCar(Car mCar) {
         this.mCar = mCar;
-	setChanged();
-	notifyObservers(mCar);
-       
+        setChanged();
+        notifyObservers(mCar);
+
     }
 
-        
     public int getPos() {
         return pos;
     }
@@ -178,7 +176,7 @@ public class Arena extends Observable {
     public void setPos(int pos) {
         this.pos = pos;
         setChanged();
-	notifyObservers(pos);
+        notifyObservers(pos);
     }
 
     public int getNbParticipants() {
@@ -188,7 +186,7 @@ public class Arena extends Observable {
     public void setNbParticipants(int nbParticipants) {
         this.nbParticipants = nbParticipants;
         setChanged();
-	notifyObservers(nbParticipants);
+        notifyObservers(nbParticipants);
     }
 
     public boolean isbGameOver() {
@@ -198,7 +196,7 @@ public class Arena extends Observable {
     public void setbGameOver(boolean bGameOver) {
         this.bGameOver = bGameOver;
         setChanged();
-	notifyObservers(bGameOver);
+        notifyObservers(bGameOver);
     }
 
     public String getsPosition() {
@@ -208,8 +206,7 @@ public class Arena extends Observable {
     public void setsPosition(String sPosition) {
         this.sPosition = sPosition;
         setChanged();
-	notifyObservers(sPosition);
+        notifyObservers(sPosition);
     }
-        
-        
+
 }

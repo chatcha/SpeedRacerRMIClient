@@ -9,19 +9,17 @@
  * @author brasc
  */
 public class Player {
-    
+
     private int score = 0;
-    private boolean bGameFinishing;  
+    private boolean bGameFinishing;
     private boolean bGameInProgress;
-    private long idPlayer; 
+    private long idPlayer;
     private boolean left, rigth, up, down;
-            
-    
-    
-    public Player(long id){
-        
+
+    public Player(long id) {
+
         this.idPlayer = id;
-    
+
     }
 
     public int getScore() {
@@ -87,8 +85,5 @@ public class Player {
     public void setDown(boolean down) {
         this.down = down;
     }
-      
-    
-       
-    
+
 }
