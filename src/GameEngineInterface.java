@@ -85,29 +85,25 @@ public interface GameEngineInterface extends java.rmi.Remote {
      * Pour lancer une partie
      *
      * @param userId
-     * @return
      * @throws RemoteException
      */
     public void beginGame(long userId) throws RemoteException;
 
     /**
      * Initialisation de la grille
-     *
-     * @param name
-     * @return
-     * @throws RemoteException
+     * @param userId
+     * @throws RemoteException 
      */
     public void newGrid(long userId) throws RemoteException;
 
-    /**
-     * Renvoyer la liste Vector containing the obstacles to display in the
-     * sliding window (layer 2)
-     *
-     * @param userId
-     * @param name1
-     * @return
-     * @throws RemoteException
-     */
+   /**
+    * Renvoyer la liste Vector containing the obstacles to display in the
+    * sliding window (layer 2)
+    * @param userId
+    * @param name
+    * @return
+    * @throws RemoteException 
+    */
     public Vector<Rectangle> listvDisplayObstacles(long userId, String name) throws RemoteException;
 
     /**

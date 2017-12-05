@@ -1,10 +1,10 @@
 
 /**
- * L'état du client. <br/>
- * <br/>
- * Etats : <br/>
- * <b>Disconnected</b> - {@link ClientState#Disconnected} <br/>
- * <b>Interrupted</b> - {@link ArenaState#Interrupted} <br/>
+ * L'état du client. 
+ * 
+ * Etats :
+ * Disconnected- {@link ClientState#Disconnected} 
+ * Interrupted - {@link ArenaState#Interrupted} 
  */
 public enum ClientState {
     /**

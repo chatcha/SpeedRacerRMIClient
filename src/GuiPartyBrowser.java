@@ -19,7 +19,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 /**
- * Classe responsable de construire la fenêtre de navigation des parties. <br/>
+ * Classe responsable de construire la fenêtre de navigation des parties. 
  * Cette fenêtre est la seconde ouverte (juste après une connexion réussie).
  * Elle affiche une liste de parties. Chaque partie peut être cliquée pour la
  * rejoindre. Un champs de texte peut être rempli, ensuite le bouton "new party"
@@ -43,8 +43,7 @@ public class GuiPartyBrowser extends JFrame implements Observer {
 
     public GuiPartyBrowser(IClient client) {
         this.client = client;
-        // mParties = new GenericTableModel<Party>(client.getParties(),
-        // Party.class);
+
         mParties = new GenericTableModel<Party>(client.getParties(),
                 new String[]{"name"});
         tbParties = new JTable(mParties);
@@ -85,6 +84,9 @@ public class GuiPartyBrowser extends JFrame implements Observer {
         JOptionPane.showMessageDialog(this, message);
     }
 
+    /**
+     * Permet d'ouvrir la zone de jeu
+     */
     private void openArena() {
         Arena arena = client.getArena();
         if (arena != null) {
@@ -109,6 +111,9 @@ public class GuiPartyBrowser extends JFrame implements Observer {
         }
     }
 
+    /**
+     * Ferme la zone de jeu
+     */
     private void closeArena() {
         this.setVisible(true);
         if (gui != null) {

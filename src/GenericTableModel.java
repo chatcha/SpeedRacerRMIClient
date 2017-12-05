@@ -6,7 +6,7 @@ import javax.swing.table.AbstractTableModel;
 
 /**
  * Cette classe représente le modèle de données lu par une JTable afin d'être
- * rendu et affiché. <br/>
+ * rendu et affiché. 
  * Gère l'affichage par ligne. Pour chaque ligne, un objet est lu en plaçant ses
  * valeurs dans chaque colonne en fonction de la position de la colonne. La
  * position de la colonne est utilisée pour connaître le nom de l'attribut à

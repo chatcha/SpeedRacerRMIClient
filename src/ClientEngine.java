@@ -1,16 +1,12 @@
 
-import java.awt.Color;
 import java.io.Serializable;
 import java.rmi.ConnectException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
@@ -40,6 +36,12 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
     private Map<String, Party> parties;
     private long id;
 
+    /**
+     * Constructeur
+     *
+     * @param username
+     * @throws RemoteException
+     */
     public ClientEngine(String username) throws RemoteException {
         super();
         this.name = username;
@@ -71,9 +73,9 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
 
     /**
      * la méthode connect appelée par le bouton "connexion" de la fenêtre de
-     * connexion.<br/>
+     * connexion.
      *
-     * @see Main
+     * Main
      */
     @Override
     public boolean connect(String url, int port) {
@@ -113,6 +115,9 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
         return (server != null && id != 0);
     }
 
+    /**
+     * Gère le problème de connexion
+     */
     private void onConnectionLost() {
         if (isConnected()) {
             if (arena != null) {
@@ -125,6 +130,9 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
         }
     }
 
+    /**
+     * Permet de se déconnecter
+     */
     @Override
     public void disconnect() {
         if (isConnected()) {
@@ -152,7 +160,7 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
 
     /**
      * méthode joinParty appelée par un clic sur une partie de la liste dans la
-     * fenêtre de navigation.<br/>
+     * fenêtre de navigation.
      */
     @Override
     public boolean joinParty(String name) {
@@ -191,7 +199,7 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
 
     /**
      * méthode joinParty appelée par un clic sur une partie de la liste dans la
-     * fenêtre de navigation.<br/>
+     * fenêtre de navigation.
      */
     @Override
     public boolean leaveParty(String name) {
@@ -223,7 +231,7 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
 
     /**
      * méthode createParty appelée par le bouton "new party" dans la fenêtre de
-     * navigation.<br/>
+     * navigation.
      */
     @Override
     public boolean createParty(String name) {
@@ -331,7 +339,6 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
             Vector<Rectangle> vDisplayRoad = server.listvDisplayRoad(id, name);
             Vector<Rectangle> vDisplayObstacles = server.listvDisplayObstacles(id, name);
             Vector<Rectangle> vDisplayCars = server.listvDisplayCars(id, name);
-            //Vector<Car> vCars = server.listvCars(id, name);
 
             // on s'assure qu'on a bien reçu des données
             if ((vDisplayRoad == null || vDisplayRoad.isEmpty())
@@ -391,37 +398,11 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
     public void update(Vector<Rectangle> vDisplayRoad, Vector<Rectangle> vDisplayObstacles, Vector<Rectangle> vDisplayCars, Car myCar, int pos, int nbParticipants, boolean bGameOver, String sPosition) throws RemoteException {
 
         if (isConnected() && arena != null) {
-            // si on est en train de jouer (d'après le serveur) et qu'on reçoit des tiles
-            //if(bGameOver && vDisplayRoad != null && vDisplayObstacles != null && vDisplayCars != null && myCar != null && pos!=0 && nbParticipants >0 && bGameOver!= false && sPosition != null ) {
 
             gui.update(vDisplayRoad, vDisplayObstacles, vDisplayCars, myCar, pos, nbParticipants, bGameOver, sPosition);
 
             System.out.println("clienEngine Update");;
-            /* arena.setVDisplayCars(vDisplayCars);
-                            arena.setVDisplayObstacles(vDisplayObstacles);
-                            arena.setmCar(myCar);
-                            arena.setNbParticipants(nbParticipants);
-                            arena.setPos(pos);
-                            arena.setbGameOver(bGameOver);
-                            arena.setsPosition(sPosition);*/
-            // si on est pas en trian de jouer (d'après le client)
-            /*	if(arena.isWaiting()) {
-					LOGGER.fine("game is started");
-					// on charge l'arène pour commencer à jouer
-					loadArena();
-				}
-			} */
-            // si on est pas en train de jouer (d'après le serveur)
-            /*if(!bGameOver) {
-				// la partie s'est terminé et on stocke le nom du gagnant
-				//arena.setWinner(sWinner);
-			}*/
-            // pour chaque update on veut stocker l'état de jeu et les scores 
-            //ArenaState state = bGameOver ? ArenaState.InProgress: ArenaState.Over;
-            //arena.setState(state);
-            //Map<String, Integer> scores = getScores();
-            // cependant on ne veut pas stocker des scores inexistants
-            //if(scores != null) arena.setScores(scores);
+
         }
 
     }
@@ -466,6 +447,12 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
         this.gui = gui;
     }
 
+    /**
+     * Permet de déplacer la voiture
+     *
+     * @param choice
+     * @param flag
+     */
     @Override
     public void moveCar(String choice, boolean flag) {
 

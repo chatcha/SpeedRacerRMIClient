@@ -8,14 +8,14 @@ import java.util.Observable;
 import java.util.Vector;
 
 /**
- * Classe représentant l'arène dans laquelle l'utilisateur combat. <br/>
- * Cette arène a un nom et un état décrit par ArenaState.<br/>
+ * Classe représentant l'arène dans laquelle l'utilisateur combat. 
+ * Cette arène a un nom et un état décrit par ArenaState.
  * Elle conserve la liste des objets Tile et Fence que la fenêtre de jeu
- * (GuiArena) lit à chaque update. <br/>
- * Elle stocke également le nom du joueur gagnant ainsi que les scores.<br/>
+ * (GuiArena) lit à chaque update. 
+ * Elle stocke également le nom du joueur gagnant ainsi que les scores.
  *
  * À chaque update du client par le serveur, le client modifie l'état, la liste
- * de Tile, le nom du joueur gagnant et les scores.<br/>
+ * de Tile, le nom du joueur gagnant et les scores.
  *
  */
 public class Arena extends Observable {
@@ -56,7 +56,7 @@ public class Arena extends Observable {
      * ************************************************************************
      */
     /**
-     * Indique le nom de la partie de jeu associée à cette arène. <br/>
+     * Indique le nom de la partie de jeu associée à cette arène. 
      *
      * @return nom de la partie correspondant à l'arène
      */
@@ -65,7 +65,7 @@ public class Arena extends Observable {
     }
 
     /**
-     * Indique l'état courrant de l'arène de combat. <br/>
+     * Indique l'état courrant de l'arène de combat.
      *
      * @see ArenaState
      * @return l'état de l'Arena

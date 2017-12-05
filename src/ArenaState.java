@@ -1,10 +1,10 @@
 
 /**
- * L'état de l'arène de combat. <br/>
- * <br/>
- * Etats : <br/>
- * <b>InProgress</b> - {@link ArenaState#InProgress} <br/>
- * <b>Interrupted</b> - {@link ArenaState#Interrupted} <br/>
+ * L'état de l'arène de combat. 
+ *
+ * Etats : 
+ * InProgress - {@link ArenaState#InProgress} 
+ * Interrupted- {@link ArenaState#Interrupted}
  */
 public enum ArenaState {
     /**
