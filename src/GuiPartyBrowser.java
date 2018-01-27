@@ -92,6 +92,7 @@ public class GuiPartyBrowser extends JFrame implements Observer {
         if (arena != null) {
             gui = new GUI(client);
             client.setGui(gui);
+           // arena.setState(ArenaState.Started);
             arena.addObserver(gui);
 
             gui.addWindowListener(new WindowAdapter() {

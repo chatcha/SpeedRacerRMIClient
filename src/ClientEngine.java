@@ -170,13 +170,14 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
                 // demande au serveur pour rejoindre la partie
                 boolean joined = server.joinArena(id, name);
                 if (joined) {
+                    System.out.println("join party '" + name + "' accepted by server");
                     LOGGER.fine("join party '" + name + "' accepted by server");
                     /* si on a réussi a rejoindre, on crée un nouvel objet Arena
 					 * pour y stocker les données de jeu
                      */
                     arena = new Arena(name);
                     // on met l'état en attente
-                    arena.setState(ArenaState.Waiting);
+                  //  arena.setState(ArenaState.Waiting);
                     Map<String, Integer> scores = getScores();
                     // on récupère les scores (car la partie est en peut être en cours
                     if (scores != null) {
@@ -293,8 +294,10 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
             LOGGER.fine("game is started");
             loadArena();
             arena.setState(ArenaState.Started);
+            System.out.println("ClientEngine.start()  : game is started");
         } else {
             LOGGER.fine("game isn't ready to start");
+            System.out.println("ClientEngine.start():  game isn't ready to start");
             arena.setState(ArenaState.Waiting);
         }
     }
@@ -417,6 +420,7 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
 
         try {
             server.newGrid(id);
+            System.out.println("ClientEngine.newGrid()");
         } catch (ConnectException ce) {
             onConnectionLost();
         } catch (RemoteException e) {
@@ -432,6 +436,7 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
             boolean started = false;
             try {
                 server.beginGame(id);
+                System.out.println("ClientEngine.beginGame()");
             } catch (ConnectException ce) {
                 onConnectionLost();
             } catch (RemoteException e) {
@@ -461,6 +466,16 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
         } catch (RemoteException ex) {
             Logger.getLogger(ClientEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public int getScore() {
+        try {
+           return  server.getScoreClient(id);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClientEngine.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return -1;
     }
 
 }

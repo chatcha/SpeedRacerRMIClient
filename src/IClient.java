@@ -20,6 +20,8 @@ public interface IClient {
     public boolean createParty(String name);
 
     public String getUsername();
+    
+    public int getScore();
 
     public void setGui(GUI gui);
 

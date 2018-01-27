@@ -52,6 +52,7 @@ public class GUI extends javax.swing.JFrame implements Observer {
 
     private HashMap<Long, Player> listPlayers;
 
+    private Arena arena=null;
     /**
      * Constructor
      */
@@ -60,7 +61,7 @@ public class GUI extends javax.swing.JFrame implements Observer {
         initComponents();
 
         this.client = client;
-        Arena arena = client.getArena();
+        arena = client.getArena();
 
         listPlayers = new HashMap();
         //Creation of the BufferedImage
@@ -328,7 +329,7 @@ public class GUI extends javax.swing.JFrame implements Observer {
         if (client.isConnected()) {
             dialog("Game isn't ready, " + hint + "please wait ...");
         }
-        jButton1.setEnabled(true);
+       // jButton1.setEnabled(true);
     }
 
     private void onOver(Arena arena) {
@@ -376,10 +377,15 @@ public class GUI extends javax.swing.JFrame implements Observer {
          */
         @Override
         public boolean dispatchKeyEvent(KeyEvent e) {
+            
             if (e.getID() == KeyEvent.KEY_PRESSED) {
+                System.out.println("Press ok before");
                 formKeyPressed(e);
+                System.out.println("Press ok after");
             } else if (e.getID() == KeyEvent.KEY_RELEASED) {
+                System.out.println("Released ok before ");
                 formKeyReleased(e);
+                
             }
             return false;
         }
@@ -401,14 +407,17 @@ public class GUI extends javax.swing.JFrame implements Observer {
      * @param sPosition The position (rank) to display if bGameOver is true
      */
     public void update(Vector<Rectangle> vDisplayRoad, Vector<Rectangle> vDisplayObstacles, Vector<Rectangle> vDisplayCars, Car myCar, int pos, int nbParticipants, boolean bGameOver, String sPosition) {
-        Arena arena = client.getArena();
+       
+     //   Arena arena = client.getArena();
         if (arena == null) {
             return;
         }
+        
+         System.out.println("Press true: "+arena.isInProgress()+" Car : "+myCar+" car  bustedTime "+myCar.bustedTime+" GameOver value : "+bGameOver);
+       
         //Set the player's score
         // jYourScore.setText(client.getServer().getScore(1)+"");
-        jYourScore.setText("0");
-
+        jYourScore.setText(client.getScore()+"");
         //Updates the kept Car reference and extract its speed
         this.myCar = myCar;
 
@@ -506,6 +515,8 @@ public class GUI extends javax.swing.JFrame implements Observer {
 
             //If game is finished, the "Play" button can be pushed again
             if (!arena.isInProgress()) {
+                 System.out.println("game is finish");
+       
                 jButton1.setEnabled(true);
             }
             /*  if(!listPlayers.get(id).isbGameInProgress())
@@ -520,6 +531,23 @@ public class GUI extends javax.swing.JFrame implements Observer {
         }
     }
 
+    
+     private String findWinner() {
+    	Arena arena = client.getArena();
+        String winnerGame = "";
+    	//Color bestColor = Color.WHITE;
+    //	if(arena == null) return bestColor;
+    	Integer bestScore = arena.getScores().get(client.getUsername());
+    	for (Map.Entry<String, Integer> entry : arena.getScores().entrySet()) {
+			String name = entry.getKey();
+			Integer score = entry.getValue();
+			if(score > bestScore) {
+				bestScore = score;
+				winnerGame = name;
+			}
+		} 
+		return winnerGame;
+	} 
     /**
      * Initializes the frame content
      */
@@ -598,14 +626,17 @@ public class GUI extends javax.swing.JFrame implements Observer {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
         //The button cannot be pushed while a game is in progress
-        jButton1.setEnabled(false);
-
+      
+       
         //Reset the score
         //Core.score = 0;
         //Initisalize the grid on the server's side
         //SpeedRacer.cCore.newGrid();
         client.newGrid();
         client.beginGame();
+        arena.setState(ArenaState.Started);
+         System.out.println("GUI.jButton1ActionPerformed()");
+         jButton1.setEnabled(false);
         //Core.bGameFinishing = false;
         //Core.bGameInProgress = true;
 
@@ -633,12 +664,17 @@ public class GUI extends javax.swing.JFrame implements Observer {
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
 
         Arena arena = client.getArena();
+        System.out.println("Press true: "+arena.isInProgress()+" Car : "+myCar+" car  bustedTime "+myCar.bustedTime);
         if (arena == null) {
+            
+            System.out.println("arena est null dans press bouton");
             return;
         }
 
         //If the game is running, the car has been displayed once and we are not currently busted
-        if (arena.isInProgress() && myCar != null && myCar.bustedTime == 0) {
+         if ( myCar != null && myCar.bustedTime == 0) {
+        //if (arena.isInProgress() && myCar != null && myCar.bustedTime == 0) {
+        System.out.println("j'entre bien ici ?");
             switch (evt.getKeyCode()) {
                 case KeyEvent.VK_LEFT: //Core.LE_P = true;   //Left arrow pressed
                     System.out.println("left");
@@ -675,8 +711,11 @@ public class GUI extends javax.swing.JFrame implements Observer {
             return;
         }
         //If the game is running, the car has been displayed once and we are not currently busted
-        if (arena.isbGameOver() && myCar != null && myCar.bustedTime == 0) {
+          if ( myCar != null && myCar.bustedTime == 0) {
+      //  if (arena.isbGameOver() && myCar != null && myCar.bustedTime == 0) {
+        System.out.println("j'entre bien ici dans release ?");
             switch (evt.getKeyCode()) {
+                
                 case KeyEvent.VK_LEFT: //Core.LE_P = false;  //Left arrow released
                     client.moveCar(Constants.LEFT, false);
                     break;
