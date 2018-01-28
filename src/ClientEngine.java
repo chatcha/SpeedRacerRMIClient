@@ -192,6 +192,7 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
                 onConnectionLost();
             } catch (RemoteException e) {
                 LOGGER.log(Level.SEVERE, "join party '" + name + "' failed", e);
+                  System.out.println( "join party '" + name + "' failed "+e);
                 return false;
             }
         }
