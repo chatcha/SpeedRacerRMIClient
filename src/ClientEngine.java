@@ -1,4 +1,5 @@
 
+import java.awt.Color;
 import java.io.Serializable;
 import java.rmi.ConnectException;
 import java.rmi.Naming;
@@ -184,6 +185,7 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
                         arena.setScores(scores);
                     }
                 } else {
+                    System.out.println("join party '" + name + "' refused by server");
                     LOGGER.fine("join party '" + name + "' refused by server");
                 }
                 return joined;
@@ -248,10 +250,12 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
                      */
                     Party newParty = instanciateParty(name);
                     parties.put(name, newParty);
+                    System.out.println("ClientEngine.createParty() Create party "+name+" accepted by server");
                     LOGGER.fine("create party '" + name + "' accepted by server");
                     return true;
                 } else {
                     LOGGER.fine("create party '" + name + "' refused by server");
+                    System.out.println("ClientEngine.createParty() create party " + name + " refused by server");
                     return false;
                 }
             } catch (ConnectException ce) {
@@ -295,10 +299,10 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
             LOGGER.fine("game is started");
             loadArena();
             arena.setState(ArenaState.Started);
-            System.out.println("ClientEngine.start()  : game is started");
+            System.out.println("ClientEngine.start()  : game is started "+started+" loadArena "+loadArena());
         } else {
             LOGGER.fine("game isn't ready to start");
-            System.out.println("ClientEngine.start():  game isn't ready to start");
+            System.out.println("ClientEngine.start():  game isn't ready to start "+started);
             arena.setState(ArenaState.Waiting);
         }
     }
@@ -338,16 +342,21 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
         }
         String name = arena.getName();
         try {
-
+ 
             // on demande au serveur les listes de Tile et Fence de cette arène
             Vector<Rectangle> vDisplayRoad = server.listvDisplayRoad(id, name);
             Vector<Rectangle> vDisplayObstacles = server.listvDisplayObstacles(id, name);
             Vector<Rectangle> vDisplayCars = server.listvDisplayCars(id, name);
+            int iFinalPosition = server.iFinalPosition(id, name);
+            String sFinalPosition = server.sFinalPosition(id, name);
+            boolean  bGameFinishing = server.bGameFinishing(id, name);
+            int iNbParticipants = server.iNbParticipants(id, name);
 
             // on s'assure qu'on a bien reçu des données
             if ((vDisplayRoad == null || vDisplayRoad.isEmpty())
                     || (vDisplayObstacles == null || vDisplayObstacles.isEmpty())
                     || (vDisplayCars == null || vDisplayCars.isEmpty())) {
+                System.out.println("arena '" + name + "' can't be loaded without any data");
                 LOGGER.finer("arena '" + name + "' can't be loaded without any data");
                 return false;
             }
@@ -356,8 +365,13 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
             arena.setvDisplayRoad(vDisplayRoad);
             arena.setVDisplayCars(vDisplayCars);
             arena.setVDisplayObstacles(vDisplayObstacles);
+            arena.setsFinalPosition(sFinalPosition);
+            arena.setNbParticipants(iNbParticipants);
+            arena.setiFinalPosition(iFinalPosition);
+            arena.setbGameFinishing(bGameFinishing);
             // arena.setVCars(vCars);
 
+            System.out.println("ClientEngine.loadArena() arena '" + name + "' is loaded succesfully");
             LOGGER.finer("arena '" + name + "' is loaded succesfully");
             return true;
         } catch (ConnectException ce) {
@@ -401,14 +415,53 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
     @Override
     public void update(Vector<Rectangle> vDisplayRoad, Vector<Rectangle> vDisplayObstacles, Vector<Rectangle> vDisplayCars, Car myCar, int pos, int nbParticipants, boolean bGameOver, String sPosition) throws RemoteException {
 
-        if (isConnected() && arena != null) {
+      
+        
+        // s'assure que le client est bien connecté et que l'arène existe
+	/*	if(isConnected() && arena != null) {
+			// si on est en train de jouer (d'après le serveur) et qu'on reçoit des tiles
+			if(bGameOver && vDisplayRoad != null  && vDisplayObstacles != null && vDisplayCars != null ) {
+				// on stocke les tiles dans l'arène
+                                arena.setvDisplayRoad(vDisplayRoad);
+                                arena.setVDisplayObstacles(vDisplayObstacles);
+				arena.setVDisplayCars(vDisplayCars);
+                                arena.setmCar(myCar);
+                                arena.setiFinalPosition(pos);
+                                arena.setNbParticipants(nbParticipants);
+                                arena.setsFinalPosition(sPosition);
+                                arena.setbGameFinishing(bGameOver);
+				// si on est pas en trian de jouer (d'après le client)
+				if(arena.isWaiting()) {
+					LOGGER.fine("game is started");
+					// on charge l'arène pour commencer à jouer
+					loadArena();
+				}
+			}
+			// si on est pas en train de jouer (d'après le serveur)
+			/*if(!bGameOver) {
+				// la partie s'est terminé et on stocke le nom du gagnant
+				arena.setWinner(sWinner);
+			} */
+			// pour chaque update on veut stocker l'état de jeu et les scores 
+/*			ArenaState state = bGameOver ? ArenaState.InProgress: ArenaState.Over;
+			arena.setState(state);
+			Map<String, Integer> scores = getScores();
+			// cependant on ne veut pas stocker des scores inexistants
+			if(scores != null) arena.setScores(scores);
+		} */
+        
+         if (isConnected() && arena != null) {
 
+           
             gui.update(vDisplayRoad, vDisplayObstacles, vDisplayCars, myCar, pos, nbParticipants, bGameOver, sPosition);
 
-            System.out.println("clienEngine Update");;
+          /*  ArenaState state = bGameOver ? ArenaState.InProgress: ArenaState.Over;
+            arena.setState(state);*/
+            System.out.println("clienEngine Update  "+isConnected()+"  "+ arena != null);
 
         }
 
+        System.out.println("clienEngine Update  "+isConnected()+"  "+ arena != null);;   
     }
 
     @Override
@@ -434,15 +487,18 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
     public void beginGame() {
 
         if (isConnected() && arena != null) {
-            boolean started = false;
+           boolean started = false;
             try {
+                
                 server.beginGame(id);
+                started = true;
                 System.out.println("ClientEngine.beginGame()");
             } catch (ConnectException ce) {
                 onConnectionLost();
             } catch (RemoteException e) {
                 LOGGER.log(Level.SEVERE, "starting game failed", e);
-            } finally {
+            }
+           finally {
                 start(started);
             }
         }

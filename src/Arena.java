@@ -29,25 +29,28 @@ public class Arena extends Observable {
     private Vector<Rectangle> vDisplayCars;
     private Vector<Car> vCars;
     private Car mCar;
-
-    int pos;
     int nbParticipants;
     boolean bGameOver = false;
-    String sPosition = null;
     private String winner;
-
+    private int iFinalPosition;
+    private boolean bGameFinishing;
+    public String sFinalPosition;
+   //  player.update(vDisplayRoad, vDisplayObstacles, vDisplayCars, vCars.elementAt(0), iFinalPosition, iNbParticipants, bGameFinishing, sFinalPosition);
     private Map<String, Integer> scores;
 
     public Arena(String name) {
         this.name = name;
         this.vDisplayRoad = new Vector();
-        this.vDisplayRoad = new Vector();
-        this.vDisplayRoad = new Vector();
+        this.vDisplayObstacles = new Vector();
         this.vDisplayCars = new Vector();
         this.vCars = new Vector<Car>();
+        iFinalPosition = 0;
+        bGameFinishing = false;
+        sFinalPosition = "";
+        nbParticipants = 4;
         this.winner = null;
         this.scores = new HashMap<String, Integer>();
-        this.state = ArenaState.Waiting;
+       // this.state = ArenaState.Waiting;
     }
 
     /**
@@ -151,7 +154,7 @@ public class Arena extends Observable {
     public void setVCars(Vector<Car> vCars) {
         this.mCar = vCars.elementAt(0);
         setChanged();
-        notifyObservers(vCars);
+        notifyObservers(this.mCar);
     }
 
     public Car getVCars() {
@@ -169,15 +172,7 @@ public class Arena extends Observable {
 
     }
 
-    public int getPos() {
-        return pos;
-    }
 
-    public void setPos(int pos) {
-        this.pos = pos;
-        setChanged();
-        notifyObservers(pos);
-    }
 
     public int getNbParticipants() {
         return nbParticipants;
@@ -199,14 +194,36 @@ public class Arena extends Observable {
         notifyObservers(bGameOver);
     }
 
-    public String getsPosition() {
-        return sPosition;
+
+    public int getiFinalPosition() {
+        return iFinalPosition;
     }
 
-    public void setsPosition(String sPosition) {
-        this.sPosition = sPosition;
+    public void setiFinalPosition(int iFinalPosition) {
+        this.iFinalPosition = iFinalPosition;
         setChanged();
-        notifyObservers(sPosition);
+	notifyObservers(iFinalPosition);
     }
 
+    public boolean isbGameFinishing() {
+        return bGameFinishing;
+    }
+
+    public void setbGameFinishing(boolean bGameFinishing) {
+        this.bGameFinishing = bGameFinishing;
+         setChanged();
+	notifyObservers(bGameFinishing);
+    }
+
+    public String getsFinalPosition() {
+        return sFinalPosition;
+    }
+
+    public void setsFinalPosition(String sFinalPosition) {
+        this.sFinalPosition = sFinalPosition;
+        setChanged();
+	notifyObservers(sFinalPosition);
+    }
+
+    
 }

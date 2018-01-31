@@ -136,6 +136,15 @@ public interface GameEngineInterface extends java.rmi.Remote {
      */
     public Vector<Rectangle> listvDisplayRoad(long userId, String name) throws RemoteException;
     
+    
+    public int  iFinalPosition(long userId, String name) throws RemoteException;
+    
+    public String  sFinalPosition(long userId, String name) throws RemoteException;
+    
+    public boolean  bGameFinishing(long userId, String name) throws RemoteException;
+     
+    public int iNbParticipants(long userId, String name) throws RemoteException;
+    
     /**
      * 
      * @param userId

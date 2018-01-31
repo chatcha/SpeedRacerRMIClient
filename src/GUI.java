@@ -50,9 +50,9 @@ public class GUI extends javax.swing.JFrame implements Observer {
      */
     public Car myCar;
 
-    private HashMap<Long, Player> listPlayers;
+   // private HashMap<Long, Player> listPlayers;
 
-    private Arena arena=null;
+   // private Arena arena=null;
     /**
      * Constructor
      */
@@ -61,9 +61,9 @@ public class GUI extends javax.swing.JFrame implements Observer {
         initComponents();
 
         this.client = client;
-        arena = client.getArena();
+        Arena arena = client.getArena();
 
-        listPlayers = new HashMap();
+     //   listPlayers = new HashMap();
         //Creation of the BufferedImage
         image = new BufferedImage(400, 400, BufferedImage.TYPE_INT_ARGB);
 
@@ -72,7 +72,10 @@ public class GUI extends javax.swing.JFrame implements Observer {
         jpBoard.setMinimumSize(new java.awt.Dimension(400, 400));
         jpBoard.setPreferredSize(new java.awt.Dimension(400, 400));
 
-        String name = arena != null ? arena.getName() : "Party";
+        String name = arena != null ? client.getUsername()+" in "+arena.getName() : "Party";
+        
+        setTitle(name);
+       
 
         //This code replaces the automatically generated layout code in such a way to include jpBoard
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jpBoard);
@@ -339,7 +342,7 @@ public class GUI extends javax.swing.JFrame implements Observer {
         }
         if (client.isConnected()) //dialog("Game is over"+hint);
         {
-            update(arena.getVDisplayRoad(), arena.getVDisplayObstacles(), arena.getVDisplayCars(), arena.getmCar(), arena.getPos(), arena.getNbParticipants(), true, arena.getsPosition());
+            update(arena.getVDisplayRoad(), arena.getVDisplayObstacles(), arena.getVDisplayCars(), arena.getmCar(), arena.getiFinalPosition(), arena.getNbParticipants(), true, arena.getsFinalPosition());
         }
         // resetForStart();
         jButton1.setEnabled(false);
@@ -408,7 +411,7 @@ public class GUI extends javax.swing.JFrame implements Observer {
      */
     public void update(Vector<Rectangle> vDisplayRoad, Vector<Rectangle> vDisplayObstacles, Vector<Rectangle> vDisplayCars, Car myCar, int pos, int nbParticipants, boolean bGameOver, String sPosition) {
        
-     //   Arena arena = client.getArena();
+       Arena arena = client.getArena();
         if (arena == null) {
             return;
         }
@@ -514,7 +517,7 @@ public class GUI extends javax.swing.JFrame implements Observer {
             }
 
             //If game is finished, the "Play" button can be pushed again
-            if (!arena.isInProgress()) {
+            if (!bGameOver) {
                  System.out.println("game is finish");
        
                 jButton1.setEnabled(true);
@@ -575,6 +578,11 @@ public class GUI extends javax.swing.JFrame implements Observer {
             }
         });
 
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                formMousePressed(evt);
+            }
+        });
         jButton1.setText("Play");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -627,14 +635,14 @@ public class GUI extends javax.swing.JFrame implements Observer {
 
         //The button cannot be pushed while a game is in progress
       
-       
+       Arena arena = client.getArena();
         //Reset the score
         //Core.score = 0;
         //Initisalize the grid on the server's side
         //SpeedRacer.cCore.newGrid();
         client.newGrid();
         client.beginGame();
-        arena.setState(ArenaState.Started);
+       // arena.setState(ArenaState.Started);
          System.out.println("GUI.jButton1ActionPerformed()");
          jButton1.setEnabled(false);
         //Core.bGameFinishing = false;
@@ -734,9 +742,20 @@ public class GUI extends javax.swing.JFrame implements Observer {
         }
     }//GEN-LAST:event_formKeyReleased
 
-    public void addPlayer(long id, Player player) {
+     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
+
+        int insideX = MouseInfo.getPointerInfo().getLocation().x - jpBoard.getLocationOnScreen().x;
+        int insideY = MouseInfo.getPointerInfo().getLocation().y - jpBoard.getLocationOnScreen().y;
+
+        Arena arena = client.getArena();
+    	if(arena == null) {
+    		return;
+    	}
+      
+    }//GEN-LAST:event_formMousePressed
+   /* public void addPlayer(long id, Player player) {
         listPlayers.put(id, player);
-    }
+    }*/
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton jButton1;
