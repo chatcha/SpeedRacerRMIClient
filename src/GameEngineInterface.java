@@ -1,6 +1,7 @@
 
 import java.awt.Color;
 import java.rmi.RemoteException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
@@ -70,7 +71,7 @@ public interface GameEngineInterface extends java.rmi.Remote {
      * @return
      * @throws RemoteException
      */
-    public Map<String, Integer> getScores(long userId) throws RemoteException;
+    public Map<Long, Integer> getScores(long userId) throws RemoteException;
 
     /**
      * Pour démarrer une partie

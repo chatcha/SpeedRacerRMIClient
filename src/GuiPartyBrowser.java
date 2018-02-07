@@ -43,7 +43,7 @@ public class GuiPartyBrowser extends JFrame implements Observer {
 
     public GuiPartyBrowser(IClient client) {
         this.client = client;
-
+        this.gui = gui;
         mParties = new GenericTableModel<Party>(client.getParties(),
                 new String[]{"name"});
         tbParties = new JTable(mParties);
@@ -90,7 +90,7 @@ public class GuiPartyBrowser extends JFrame implements Observer {
     private void openArena() {
         Arena arena = client.getArena();
         if (arena != null) {
-            gui = new GUI(client);
+           gui = new GUI(client);
             client.setGui(gui);
            // arena.setState(ArenaState.Started);
             arena.addObserver(gui);
@@ -103,10 +103,11 @@ public class GuiPartyBrowser extends JFrame implements Observer {
                 }
             });
 
-            client.newGame();
+          
             gui.setVisible(true);
 
             gui.jButton1.setEnabled(true);
+              client.newGame();
             this.setVisible(false);
 
         }

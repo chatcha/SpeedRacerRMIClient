@@ -1,5 +1,4 @@
 
-import java.awt.Color;
 import java.io.Serializable;
 import java.rmi.ConnectException;
 import java.rmi.Naming;
@@ -50,8 +49,8 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
         this.parties = new HashMap<String, Party>();
     }
 
-    private Map<String, Integer> getScores() {
-        Map<String, Integer> scores = null;
+    private Map<Long, Integer> getScores() {
+        Map<Long, Integer> scores = null;
         try {
             scores = server.getScores(id);
             LOGGER.finest("scores retrieved succesfully");
@@ -179,7 +178,7 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
                     arena = new Arena(name);
                     // on met l'état en attente
                   //  arena.setState(ArenaState.Waiting);
-                    Map<String, Integer> scores = getScores();
+                    Map<Long, Integer> scores = getScores();
                     // on récupère les scores (car la partie est en peut être en cours
                     if (scores != null) {
                         arena.setScores(scores);
@@ -347,6 +346,7 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
             Vector<Rectangle> vDisplayRoad = server.listvDisplayRoad(id, name);
             Vector<Rectangle> vDisplayObstacles = server.listvDisplayObstacles(id, name);
             Vector<Rectangle> vDisplayCars = server.listvDisplayCars(id, name);
+            Vector<Car> Cars = server.listvCars(id, name);
             int iFinalPosition = server.iFinalPosition(id, name);
             String sFinalPosition = server.sFinalPosition(id, name);
             boolean  bGameFinishing = server.bGameFinishing(id, name);
@@ -365,6 +365,7 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
             arena.setvDisplayRoad(vDisplayRoad);
             arena.setVDisplayCars(vDisplayCars);
             arena.setVDisplayObstacles(vDisplayObstacles);
+            arena.setmCar(Cars.elementAt(0));
             arena.setsFinalPosition(sFinalPosition);
             arena.setNbParticipants(iNbParticipants);
             arena.setiFinalPosition(iFinalPosition);
@@ -420,7 +421,7 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
         // s'assure que le client est bien connecté et que l'arène existe
 	/*	if(isConnected() && arena != null) {
 			// si on est en train de jouer (d'après le serveur) et qu'on reçoit des tiles
-			if(bGameOver && vDisplayRoad != null  && vDisplayObstacles != null && vDisplayCars != null ) {
+			if(!bGameOver && vDisplayRoad != null  && vDisplayObstacles != null && vDisplayCars != null ) {
 				// on stocke les tiles dans l'arène
                                 arena.setvDisplayRoad(vDisplayRoad);
                                 arena.setVDisplayObstacles(vDisplayObstacles);
@@ -450,18 +451,19 @@ public class ClientEngine extends Observable implements ClientInterface, IClient
 			if(scores != null) arena.setScores(scores);
 		} */
         
-         if (isConnected() && arena != null) {
+      if (isConnected()) {
 
            
             gui.update(vDisplayRoad, vDisplayObstacles, vDisplayCars, myCar, pos, nbParticipants, bGameOver, sPosition);
 
-          /*  ArenaState state = bGameOver ? ArenaState.InProgress: ArenaState.Over;
-            arena.setState(state);*/
-            System.out.println("clienEngine Update  "+isConnected()+"  "+ arena != null);
+          /* ArenaState state = bGameOver ? ArenaState.InProgress: ArenaState.Over;
+            arena.setState(state);
+            System.out.println("clienEngine Update  "+isConnected()+"  "+ arena != null);*/
 
         }
 
         System.out.println("clienEngine Update  "+isConnected()+"  "+ arena != null);;   
+  
     }
 
     @Override

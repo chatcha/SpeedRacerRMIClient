@@ -36,7 +36,7 @@ public class Arena extends Observable {
     private boolean bGameFinishing;
     public String sFinalPosition;
    //  player.update(vDisplayRoad, vDisplayObstacles, vDisplayCars, vCars.elementAt(0), iFinalPosition, iNbParticipants, bGameFinishing, sFinalPosition);
-    private Map<String, Integer> scores;
+    private Map<Long, Integer> scores;
 
     public Arena(String name) {
         this.name = name;
@@ -49,7 +49,7 @@ public class Arena extends Observable {
         sFinalPosition = "";
         nbParticipants = 4;
         this.winner = null;
-        this.scores = new HashMap<String, Integer>();
+        this.scores = new HashMap<Long, Integer>();
        // this.state = ArenaState.Waiting;
     }
 
@@ -111,11 +111,11 @@ public class Arena extends Observable {
         this.winner = winner;
     }
 
-    public Map<String, Integer> getScores() {
+    public Map<Long, Integer> getScores() {
         return scores;
     }
 
-    public void setScores(Map<String, Integer> scores) {
+    public void setScores(Map<Long, Integer> scores) {
         this.scores = scores;
         setChanged();
         notifyObservers(scores);
